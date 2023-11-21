@@ -1,5 +1,4 @@
 package com.example.project_final
-
 import android.os.Bundle
 import android.view.Menu
 import com.google.android.material.snackbar.Snackbar
@@ -11,7 +10,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.example.project_final.api.RandomWordApiHandler
 import com.example.project_final.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,6 +44,21 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        lifecycleScope.launch {
+            val randomWordApiHandler = RandomWordApiHandler()
+            randomWordApiHandler.fetchRandomWord { response ->
+                // Handle the API response here
+                if (response != null) {
+                    // Process the response string (which contains the random word)
+                    println("Random word: $response")
+                    println(response[0])
+                    // Update UI or perform other operations with the response string
+                } else {
+                    // Handle the case when response is null or API call fails
+                    println("API call failed.")
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

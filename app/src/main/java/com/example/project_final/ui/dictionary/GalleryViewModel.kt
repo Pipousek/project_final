@@ -1,4 +1,4 @@
-package com.example.project_final.ui.gallery
+package com.example.project_final.ui.dictionary
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

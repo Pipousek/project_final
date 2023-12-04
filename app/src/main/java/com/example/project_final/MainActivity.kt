@@ -45,30 +45,51 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
         lifecycleScope.launch {
-            val randomWordApiHandler = RandomWordApiHandler()
-            randomWordApiHandler.fetchRandomWord { response ->
-                // Handle the API response here
-                if (response != null) {
-                    // Process the response string (which contains the random word)
-                    var responseSet = response.joinToString(",")
-                    if (sharedPreferences.contains(stringSetKey)) {
-                        val oldData = sharedPreferences.getString(stringSetKey, "")
-                        responseSet = "$oldData,$responseSet"
-                    }
-                    sharedPreferences.edit().putString(stringSetKey, responseSet).apply()
-                    val receivedSharedPreferences = sharedPreferences.getString(stringSetKey, "")
-                    println(receivedSharedPreferences)
-                    // Update UI or perform other operations with the response string
-                } else {
-                    // Handle the case when response is null or API call fails
-                    println("API call failed.")
-                }
+//            val randomWordApiHandler = RandomWordApiHandler()
+//            randomWordApiHandler.fetchRandomWord { response ->
+//                // Handle the API response here
+//                if (response != null) {
+//                    // Process the response string (which contains the random word)
+//                    var responseSet = response.joinToString(",")
+//                    if (sharedPreferences.contains(stringSetKey)) {
+//                        val oldData = sharedPreferences.getString(stringSetKey, "")
+//                        responseSet = "$oldData,$responseSet"
+//                    }
+//                    sharedPreferences.edit().putString(stringSetKey, responseSet).apply()
+//                    val receivedSharedPreferences = sharedPreferences.getString(stringSetKey, "")
+//                    println(receivedSharedPreferences)
+//                    // Update UI or perform other operations with the response string
+//                } else {
+//                    // Handle the case when response is null or API call fails
+//                    println("API call failed.")
+//                }
+//            }
+            sharedPreferences.edit().remove(stringSetKey).apply()
+            if (!sharedPreferences.contains(stringSetKey)) {
+                sharedPreferences.edit().putString(stringSetKey, defaultWordsData()).apply()
             }
+            val receivedSharedPreferences = sharedPreferences.getString(stringSetKey, "")
+            println(receivedSharedPreferences)
         }
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun defaultWordsData(): String {
+        return listOf(
+            "Amber", "Blame", "Chase", "Diver", "Eagle",
+            "Fable", "Grasp", "Haste", "Inset", "Joust",
+            "Knack", "Latch", "Mirth", "Nudge", "Olive",
+            "Pouch", "Quirk", "Rally", "Scent", "Trace",
+            "Umbra", "Viper", "Widen", "Xerox", "Yacht",
+            "Zebra", "Frown", "Glide", "Humor", "Icily",
+            "Jumpy", "Knead", "Latch", "Maple", "Navel",
+            "Overt", "Plush", "Quest", "Rigid", "Snack",
+            "Tramp", "Untie", "Virus", "Wrist", "Xylon",
+            "Yodel", "Zesty", "Blaze", "Cower", "Dusky"
+        ).joinToString(",")
     }
 }

@@ -34,7 +34,7 @@ class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this).get(GameViewModel::class.java)
 
         _binding = FragmentGameBinding.inflate(inflater, container, false)
         val root: View = binding.root

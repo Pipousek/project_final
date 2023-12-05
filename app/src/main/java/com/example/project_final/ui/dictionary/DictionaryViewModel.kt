@@ -2,8 +2,9 @@ package com.example.project_final.ui.dictionary
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import com.example.project_final.api.RandomWordApiHandler
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class DictionaryViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -11,17 +12,42 @@ class DictionaryViewModel(application: Application) : AndroidViewModel(applicati
     private val stringSetKey = "myStringSet"
     private val randomWordApiHandler = RandomWordApiHandler()
 
-    internal fun updateSharePrefenerces() {
-        randomWordApiHandler.fetchRandomWord { response ->
-            if (response != null) {
-                val sharedPreferences = getApplication<Application>().getSharedPreferences(sharedPreferencesFileName, Context.MODE_PRIVATE)
-                var responseSet = response.joinToString(",")
-                if (sharedPreferences.contains(stringSetKey)) {
-                    val oldData = sharedPreferences.getString(stringSetKey, "")
-                    responseSet = "$oldData,$responseSet"
+    internal suspend fun updateSharePrefenerces(): List<String> {
+        return suspendCoroutine { continuation ->
+            randomWordApiHandler.fetchRandomWord { response ->
+                if (response != null) {
+                    val sharedPreferences = getApplication<Application>().getSharedPreferences(
+                        sharedPreferencesFileName,
+                        Context.MODE_PRIVATE
+                    )
+                    val oldData = sharedPreferences.getString(stringSetKey, "")?.split(",")
+                    var responseList = response.toMutableList()
+                    println(responseList.count())
+
+                    if (oldData != null) {
+                        for (word in response) {
+                            if (word in oldData) {
+                                println(word)
+                                responseList.remove(word)
+                            }
+                        }
+                    }
+
+                    var responseSet = responseList.joinToString(",")
+                    if (sharedPreferences.contains(stringSetKey)) {
+                        responseSet = "${oldData?.joinToString(",")},$responseSet"
+                    }
+                    sharedPreferences.edit().putString(stringSetKey, responseSet).apply()
+
+                    println(responseList.count())
+                    println(response)
+                    println(responseList)
+                    println(responseSet)
+
+                    // Return the updated list
+                    val updatedList = responseSet.split(",")
+                    continuation.resume(updatedList)
                 }
-                sharedPreferences.edit().putString(stringSetKey, responseSet).apply()
-                println(response)
             }
         }
     }

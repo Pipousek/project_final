@@ -11,7 +11,6 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.project_final.api.RandomWordApiHandler
 import com.example.project_final.databinding.ActivityMainBinding
 import kotlinx.coroutines.launch
 
@@ -80,16 +79,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun defaultWordsData(): String {
         return listOf(
-            "Amber", "Blame", "Chase", "Diver", "Eagle",
-            "Fable", "Grasp", "Haste", "Inset", "Joust",
-            "Knack", "Latch", "Mirth", "Nudge", "Olive",
-            "Pouch", "Quirk", "Rally", "Scent", "Trace",
-            "Umbra", "Viper", "Widen", "Xerox", "Yacht",
-            "Zebra", "Frown", "Glide", "Humor", "Icily",
-            "Jumpy", "Knead", "Latch", "Maple", "Navel",
-            "Overt", "Plush", "Quest", "Rigid", "Snack",
-            "Tramp", "Untie", "Virus", "Wrist", "Xylon",
-            "Yodel", "Zesty", "Blaze", "Cower", "Dusky"
+            "amber", "blame", "chase", "diver", "eagle",
+            "fable", "grasp", "haste", "inset", "joust",
+            "knack", "latch", "mirth", "nudge", "olive",
+            "pouch", "quirk", "rally", "scent", "trace",
+            "umbra", "viper", "widen", "xerox", "yacht",
+            "zebra", "frown", "glide", "humor", "icily",
+            "jumpy", "knead", "latch", "maple", "navel",
+            "overt", "plush", "quest", "rigid", "snack",
+            "tramp", "untie", "virus", "wrist", "xylon",
+            "yodel", "zesty", "blaze", "cower", "dusky"
         ).joinToString(",")
     }
 }

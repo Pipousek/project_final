@@ -1,15 +1,17 @@
 package com.example.project_final.ui.dictionary
 import DictionaryAdapter
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.project_final.api.RandomWordApiHandler
 import com.example.project_final.databinding.FragmentDictionaryBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DictionaryFragment : Fragment() {
 
@@ -36,8 +38,15 @@ class DictionaryFragment : Fragment() {
         updateRecyclerView(dictioanryViewModel.returnWordsAsList())
 
         binding.button.setOnClickListener {
-            dictioanryViewModel.updateSharePrefenerces()
-            updateRecyclerView(dictioanryViewModel.returnWordsAsList())
+            lifecycleScope.launch {
+                // Use the async function within a coroutine scope
+                val updatedList = dictioanryViewModel.updateSharePrefenerces()
+
+                // Update the RecyclerView on the main thread
+                withContext(Dispatchers.Main) {
+                    updateRecyclerView(updatedList)
+                }
+            }
         }
 
         return root

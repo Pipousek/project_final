@@ -3,23 +3,22 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import com.example.project_final.api.RandomWordApiHandler
+import com.example.project_final.getSharedPreferencesFileName
+import com.example.project_final.getStringSetKey
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class DictionaryViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val sharedPreferencesFileName = "mySharedPreferences"
-    private val stringSetKey = "myStringSet"
+    private val sharedPreferencesFileName = getSharedPreferencesFileName()
+    private val stringSetKey = getStringSetKey()
     private val randomWordApiHandler = RandomWordApiHandler()
 
     internal suspend fun updateSharePrefenerces(): List<String> {
         return suspendCoroutine { continuation ->
             randomWordApiHandler.fetchRandomWord { response ->
                 if (response != null) {
-                    val sharedPreferences = getApplication<Application>().getSharedPreferences(
-                        sharedPreferencesFileName,
-                        Context.MODE_PRIVATE
-                    )
+                    val sharedPreferences = getApplication<Application>().getSharedPreferences(sharedPreferencesFileName, Context.MODE_PRIVATE)
                     val oldData = sharedPreferences.getString(stringSetKey, "")?.split(",")
                     var responseList = response.toMutableList()
                     println(responseList.count())

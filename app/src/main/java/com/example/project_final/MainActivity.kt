@@ -10,9 +10,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.example.project_final.databinding.ActivityMainBinding
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,13 +25,14 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.appBarMain.toolbar)
+//        setSupportActionBar(binding.appBarMain.toolbar)
 
         val sharedPreferences: SharedPreferences = getSharedPreferences(sharedPreferencesFileName, Context.MODE_PRIVATE)
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
@@ -43,33 +42,13 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        lifecycleScope.launch {
-//            val randomWordApiHandler = RandomWordApiHandler()
-//            randomWordApiHandler.fetchRandomWord { response ->
-//                // Handle the API response here
-//                if (response != null) {
-//                    // Process the response string (which contains the random word)
-//                    var responseSet = response.joinToString(",")
-//                    if (sharedPreferences.contains(stringSetKey)) {
-//                        val oldData = sharedPreferences.getString(stringSetKey, "")
-//                        responseSet = "$oldData,$responseSet"
-//                    }
-//                    sharedPreferences.edit().putString(stringSetKey, responseSet).apply()
-//                    val receivedSharedPreferences = sharedPreferences.getString(stringSetKey, "")
-//                    println(receivedSharedPreferences)
-//                    // Update UI or perform other operations with the response string
-//                } else {
-//                    // Handle the case when response is null or API call fails
-//                    println("API call failed.")
-//                }
-//            }
-            sharedPreferences.edit().remove(stringSetKey).apply()
-            if (!sharedPreferences.contains(stringSetKey)) {
-                sharedPreferences.edit().putString(stringSetKey, defaultWordsData()).apply()
-            }
-            val receivedSharedPreferences = sharedPreferences.getString(stringSetKey, "")
-            println(receivedSharedPreferences)
+
+        sharedPreferences.edit().remove(stringSetKey).apply()
+        if (!sharedPreferences.contains(stringSetKey)) {
+            sharedPreferences.edit().putString(stringSetKey, defaultWordsData()).apply()
         }
+        val receivedSharedPreferences = sharedPreferences.getString(stringSetKey, "")
+        println(receivedSharedPreferences)
     }
 
     override fun onSupportNavigateUp(): Boolean {

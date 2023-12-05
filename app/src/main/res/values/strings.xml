@@ -11,4 +11,6 @@
     <string name="menu_dictionary">Dictionary</string>
     <string name="generate_words">Generate Words</string>
     <string name="check_word">Check word</string>
+    <string name="attempts">Attempts:</string>
+    <string name="reset_game">Reset game</string>
 </resources>

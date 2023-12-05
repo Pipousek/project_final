@@ -26,7 +26,7 @@ class DictionaryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dictioanryViewModel =
+        val dictionaryViewModel =
             ViewModelProvider(this).get(DictionaryViewModel::class.java)
 
         _binding = FragmentDictionaryBinding.inflate(inflater, container, false)
@@ -35,12 +35,12 @@ class DictionaryFragment : Fragment() {
         val layoutManager = LinearLayoutManager(context)
         binding.recyclerView.layoutManager = layoutManager
 
-        updateRecyclerView(dictioanryViewModel.returnWordsAsList())
+        updateRecyclerView(dictionaryViewModel.returnWordsAsList())
 
         binding.button.setOnClickListener {
             lifecycleScope.launch {
                 // Use the async function within a coroutine scope
-                val updatedList = dictioanryViewModel.updateSharePrefenerces()
+                val updatedList = dictionaryViewModel.updateSharePrefenerces()
 
                 // Update the RecyclerView on the main thread
                 withContext(Dispatchers.Main) {

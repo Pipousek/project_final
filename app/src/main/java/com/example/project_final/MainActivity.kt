@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        setSupportActionBar(binding.appBarMain.toolbar)
+        setSupportActionBar(binding.appBarMain.toolbar)
 
         val sharedPreferences: SharedPreferences = getSharedPreferences(sharedPreferencesFileName, Context.MODE_PRIVATE)
 

@@ -63,8 +63,9 @@ class GameFragment : Fragment() {
         textWatchers()
 
         origWord = gameViewModel.getCurrentGameWord().toString()
-        println("Current game word from storage: $origWord")
-        if (origWord == "") {
+        println("Current game word from storage: '$origWord'")
+        println("Is current game word empty?: ${origWord.isEmpty()}")
+        if (origWord.isEmpty()) {
             origWord = gameViewModel.getRandomWordFromDictionary()
         }
         attempt = gameViewModel.getCurrentGameAttempts()
@@ -80,6 +81,9 @@ class GameFragment : Fragment() {
         }
 
         binding.btnCheckWord.setOnClickListener {
+            if (origWord.isEmpty()) {
+                origWord = gameViewModel.getRandomWordFromDictionary()
+            }
             guessWord = ""
 
             for (editText in editTexts) {

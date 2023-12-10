@@ -14,7 +14,6 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.project_final.databinding.ActivityMainBinding
-import kotlinx.coroutines.delay
 
 class MainActivity : AppCompatActivity() {
 

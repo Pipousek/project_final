@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.project_final.R
 import com.example.project_final.databinding.FragmentGameBinding
+import com.example.project_final.getOrigWordKey
 
 
 class GameFragment : Fragment() {
@@ -27,6 +28,7 @@ class GameFragment : Fragment() {
     private var origWord = ""
     private var guessWord = ""
     private var attempt = 0
+    private val origWordKey = getOrigWordKey()
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -34,7 +36,7 @@ class GameFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        println("BABABABABABABABABABA")
+        println("Application start")
         val gameViewModel =
             ViewModelProvider(this).get(GameViewModel::class.java)
 
@@ -67,8 +69,6 @@ class GameFragment : Fragment() {
 
         binding.btnCheckWord.setOnClickListener {
             guessWord = ""
-            attempt++
-            binding.tvAttempts.text = "Attempts: $attempt"
 
             for (editText in editTexts) {
                 guessWord += editText.text
@@ -77,12 +77,16 @@ class GameFragment : Fragment() {
             println(origWord)
             println(guessWord)
 
-            val result = gameViewModel.checkWord(origWord, guessWord)
-            colorCircles(result)
+            if (guessWord.length == 5) {
+                val result = gameViewModel.checkWord(origWord, guessWord)
+                colorCircles(result)
 
-            if (result.sum() == 10) {
-                binding.btnCheckWord.isEnabled = false
-                binding.btnCheckWord.isClickable = false
+                if (result.sum() == 10) {
+                    binding.btnCheckWord.isEnabled = false
+                    binding.btnCheckWord.isClickable = false
+                }
+                attempt++
+                binding.tvAttempts.text = "Attempts: $attempt"
             }
         }
 
@@ -113,13 +117,10 @@ class GameFragment : Fragment() {
         for (idx in (0..result.count() - 1)) {
             if (result[idx] == 0) {
                 circles[idx].setImageResource(R.drawable.circle_shape_bad)
-                circles[idx].invalidate()
             } else if (result[idx] == 1) {
                 circles[idx].setImageResource(R.drawable.circle_shape_maybe)
-                circles[idx].invalidate()
-            } else {
+            } else if (result[idx] == 2) {
                 circles[idx].setImageResource(R.drawable.circle_shape_good)
-                circles[idx].invalidate()
             }
             println(circles[idx])
         }

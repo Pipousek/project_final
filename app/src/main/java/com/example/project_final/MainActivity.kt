@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.project_final.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -43,12 +45,9 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        sharedPreferences.edit().remove(stringSetKey).apply()
         if (!sharedPreferences.contains(stringSetKey)) {
             sharedPreferences.edit().putString(stringSetKey, defaultWordsData()).apply()
         }
-        val receivedSharedPreferences = sharedPreferences.getString(stringSetKey, "")
-        println(receivedSharedPreferences)
     }
 
     override fun onSupportNavigateUp(): Boolean {

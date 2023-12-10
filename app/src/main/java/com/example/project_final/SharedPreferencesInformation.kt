@@ -11,3 +11,15 @@ fun getOrigWordKey(): String {
 fun getSharedPreferencesFileName(): String {
     return "mySharedPreferences"
 }
+
+fun getCurrentGameWordFromStorage(): String {
+    return "myCurrentGameWord"
+}
+
+fun getCurrentGameAttemptsFromStorage(): String {
+    return "myCurrentGameAttempts"
+}
+
+fun getCurrentGameWordStatus(): String {
+    return "myCurrentGameWordChecked"
+}

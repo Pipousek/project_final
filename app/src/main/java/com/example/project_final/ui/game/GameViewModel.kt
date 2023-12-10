@@ -3,21 +3,26 @@ package com.example.project_final.ui.game
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
-import com.example.project_final.getOrigWordKey
-import com.example.project_final.getSharedPreferencesFileName
-import com.example.project_final.getStringSetKey
+import com.example.project_final.*
 
 class GameViewModel(application: Application) : AndroidViewModel(application) {
 
     private val sharedPreferencesFileName = getSharedPreferencesFileName()
     private val stringSetKey = getStringSetKey()
     private val origWordKey = getOrigWordKey()
+    private val currentGameWord = getCurrentGameWordFromStorage()
+    private val currentGameAttempts = getCurrentGameAttemptsFromStorage()
+    private val currentGameWordStatus = getCurrentGameWordStatus()
     private val sharedPreferences = getApplication<Application>().getSharedPreferences(sharedPreferencesFileName, Context.MODE_PRIVATE)
 
     internal fun getRandomWordFromDictionary(): String {
         val storedWords = sharedPreferences.getString(stringSetKey, "")?.split(",")
         val randNum = (0..storedWords!!.count() - 1).random()
-        return storedWords[randNum]
+        val randomWord = storedWords[randNum]
+        sharedPreferences.edit().putString(currentGameWord, randomWord).apply()
+        sharedPreferences.edit().putInt(currentGameAttempts, 0).apply()
+        sharedPreferences.edit().putInt(currentGameWordStatus, 0).apply()
+        return randomWord
     }
 
     internal fun checkWord(origWord: String, guessWord: String): List<Int> {
@@ -37,4 +42,23 @@ class GameViewModel(application: Application) : AndroidViewModel(application) {
         return result
     }
 
+    internal fun getCurrentGameWord(): String? {
+        return sharedPreferences.getString(currentGameWord, "")
+    }
+
+    internal fun getCurrentGameAttempts(): Int {
+        return sharedPreferences.getInt(currentGameAttempts, 0)
+    }
+
+    internal fun setCurrentGameAttempts(attemptCount: Int) {
+        sharedPreferences.edit().putInt(currentGameAttempts, attemptCount).apply()
+    }
+
+    internal fun getCurrentWordStatus(): Int {
+        return sharedPreferences.getInt(currentGameWordStatus, 0)
+    }
+
+    internal fun setCurrentWordStatus(gameWordStatus: Int) {
+        sharedPreferences.edit().putInt(currentGameWordStatus, gameWordStatus).apply()
+    }
 }

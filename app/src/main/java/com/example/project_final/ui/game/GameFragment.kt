@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.project_final.R
 import com.example.project_final.databinding.FragmentGameBinding
-import com.example.project_final.getOrigWordKey
 
 
 class GameFragment : Fragment() {
@@ -27,8 +26,8 @@ class GameFragment : Fragment() {
 
     private var origWord = ""
     private var guessWord = ""
+    private var gameStatus = 0
     private var attempt = 0
-    private val origWordKey = getOrigWordKey()
 
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
@@ -63,8 +62,21 @@ class GameFragment : Fragment() {
 
         textWatchers()
 
+        origWord = gameViewModel.getCurrentGameWord().toString()
+        println("Current game word from storage: $origWord")
         if (origWord == "") {
             origWord = gameViewModel.getRandomWordFromDictionary()
+        }
+        attempt = gameViewModel.getCurrentGameAttempts()
+        println("Current game attempts from storage: $attempt")
+        if (attempt != 0) {
+            binding.tvAttempts.text = "Attempts: $attempt"
+        }
+        gameStatus = gameViewModel.getCurrentWordStatus()
+        println("Current game status: $gameStatus")
+        if (gameStatus == 1) {
+            binding.btnCheckWord.isEnabled = false
+            binding.btnCheckWord.isClickable = false
         }
 
         binding.btnCheckWord.setOnClickListener {
@@ -74,8 +86,8 @@ class GameFragment : Fragment() {
                 guessWord += editText.text
                 println(editText.text)
             }
-            println(origWord)
-            println(guessWord)
+            println("Orig word: $origWord")
+            println("Guess word: $guessWord")
 
             if (guessWord.length == 5) {
                 val result = gameViewModel.checkWord(origWord, guessWord)
@@ -84,8 +96,10 @@ class GameFragment : Fragment() {
                 if (result.sum() == 10) {
                     binding.btnCheckWord.isEnabled = false
                     binding.btnCheckWord.isClickable = false
+                    gameViewModel.setCurrentWordStatus(1)
                 }
                 attempt++
+                gameViewModel.setCurrentGameAttempts(attempt)
                 binding.tvAttempts.text = "Attempts: $attempt"
             }
         }
